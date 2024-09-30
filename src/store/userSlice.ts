@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../models/IUser";
-import { firebaseDB } from "../firebase/firebase";
 
 
 type UserState = {
@@ -15,19 +14,19 @@ const initialState: UserState = {
   error: null,
 };
 
-export const fetchUserScore = createAsyncThunk<IUser, { userId: number }>(
-  "user/fetchUserScore",
-  async ({ userId }) => {
-    const userDoc = await firebaseDB
-      .collection("users")
-      .doc(userId.toString())
-      .get();
-    if (userDoc.exists) {
-      return { id: userDoc.id, ...userDoc.data() } as IUser; 
-    }
-    return { id: userId, name: "Test", score: 0 };
-  }
-);
+// export const fetchUserScore = createAsyncThunk<IUser, { userId: number }>(
+//   "user/fetchUserScore",
+//   async ({ userId }) => {
+//     const userDoc = await firebaseDB
+//       .collection("users")
+//       .doc(userId.toString())
+//       .get();
+//     if (userDoc.exists) {
+//       return { id: userDoc.id, ...userDoc.data() } as IUser; 
+//     }
+//     return { id: userId, name: "Test", score: 0 };
+//   }
+// );
 
 const userSlice = createSlice({
   name: "user",
@@ -38,21 +37,21 @@ const userSlice = createSlice({
       state.user.name = action.payload.name;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserScore.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(fetchUserScore.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user.score = action.payload.score; 
-      })
-      .addCase(fetchUserScore.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || "Failed to fetch user score";
-      });
-  },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(fetchUserScore.pending, (state) => {
+  //       state.isLoading = true;
+  //       state.error = null;
+  //     })
+  //     .addCase(fetchUserScore.fulfilled, (state, action) => {
+  //       state.isLoading = false;
+  //       state.user.score = action.payload.score; 
+  //     })
+  //     .addCase(fetchUserScore.rejected, (state, action) => {
+  //       state.isLoading = false;
+  //       state.error = action.error.message || "Failed to fetch user score";
+  //     });
+  // },
 });
 
 export const { getTgUser } = userSlice.actions;

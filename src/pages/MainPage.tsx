@@ -14,7 +14,7 @@ const MainPage: FC = () => {
           <div>
             {user ? (
               <>
-                user?.username <LiaHandSpockSolid />
+                {user?.username} <LiaHandSpockSolid />
               </>
             ) : (
               "Account not found"

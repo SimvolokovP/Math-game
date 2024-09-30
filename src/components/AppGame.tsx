@@ -1,13 +1,24 @@
 import { FC, useEffect, useState } from "react";
 import { answers, equations } from "../utils/utils";
+import { IUser } from "../models/IUser";
+import UsersService from "../api/firebaseApi";
 
 interface AppGameProps {
   setIsLose: (value: boolean) => void;
   setScore: (value: number) => void;
   score: number;
+  currentUser: IUser;
+  setCurrentUser: (user: IUser) => void; 
+  isLose: boolean
 }
 
-const AppGame: FC<AppGameProps> = ({ setIsLose, setScore, score }) => {
+const AppGame: FC<AppGameProps> = ({
+  setIsLose,
+  setScore,
+  score,
+  currentUser,
+  setCurrentUser,
+}) => {
   const [timer, setTimer] = useState<number>(3);
   const [animate, setAnimate] = useState<boolean>(false);
   const [currentLevel, setCurrentLevel] = useState<number>(1);
@@ -25,25 +36,37 @@ const AppGame: FC<AppGameProps> = ({ setIsLose, setScore, score }) => {
     setCurrentEquation(getRandomEquation(currentLevel));
   }, [currentLevel]);
 
+  const handleScoreUpdate = async () => {
+    if (score > currentUser.score) {
+      console.log(score, currentUser.score);
+      await UsersService.updateUserScore(currentUser, score);
+
+      // Optionally update the currentUser state if needed
+      setCurrentUser({ ...currentUser, score }); // Update score in the currentUser
+    }
+  };
+
   const checkAnswer = (ans: number) => {
     if (ans === currentEquation.answer) {
       setScore(score + 1);
       const newCount = correctAnswersCount + 1;
       setCorrectAnswersCount(newCount);
+
       if (newCount >= 5) {
-        setCurrentLevel(1);
+        setCurrentLevel(currentLevel + 1); // Увеличение уровня
         setCorrectAnswersCount(0);
       }
 
-      setTimer(3);
-      setCurrentEquation(getRandomEquation(1));
+      setTimer(3); // Сброс таймера
+      setCurrentEquation(getRandomEquation(currentLevel));
     } else {
-      setTimer(0);
+      setTimer(0); // Если ответ неправильный, заканчиваем таймер
     }
   };
 
   useEffect(() => {
     if (timer === 0) {
+      handleScoreUpdate(); // Проверка и обновление счета при окончании таймера
       setIsLose(true);
     } else {
       const interval = setInterval(() => {
@@ -55,7 +78,7 @@ const AppGame: FC<AppGameProps> = ({ setIsLose, setScore, score }) => {
 
       return () => clearInterval(interval);
     }
-  }, [timer, setIsLose]);
+  }, [timer, setIsLose, score, currentUser]);
 
   return (
     <>

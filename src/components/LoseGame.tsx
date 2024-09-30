@@ -2,6 +2,7 @@ import { FC } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 interface LoseGameProps {
   score: number;
   setIsStart: (value: boolean) => void;
@@ -15,6 +16,7 @@ const LoseGame: FC<LoseGameProps> = ({
   setIsStart,
   setScore,
 }) => {
+
   const resetGame = () => {
     setIsStart(true);
     setIsLose(false);

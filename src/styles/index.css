@@ -62,7 +62,8 @@ img {
 }
 
 .main-page__container,
-.game-page__container {
+.game-page__container,
+.leaderboard-page__container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -210,4 +211,75 @@ button {
 .game-page__score {
   font-size: 36px;
   font-weight: 700;
+}
+
+.top-users {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-users__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-users__item--img span {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-color: var(--primary-color);
+  bottom: -8px;
+  border-radius: 100%;
+  font-size: 14px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-users li:nth-child(2) {
+  transform: translateY(-30px) scale(1.2);
+}
+
+.top-users__item--img {
+  width: 70px;
+  height: 70px;
+  border: 2px solid var(--primary-color);
+  border-radius: 100%;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.top-users__item--crown {
+  position: absolute;
+  top: -20px;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 280px;
+}
+
+.users-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.users-list li div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
